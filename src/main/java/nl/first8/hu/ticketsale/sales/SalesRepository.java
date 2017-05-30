@@ -64,5 +64,7 @@ public class SalesRepository {
         return Optional.ofNullable(entityManager.find(Ticket.class, ticketId));
     }
 
-
+public void insert(final AuditTrail auditTrail){
+        entityManager.merge(auditTrail);
+}
 }

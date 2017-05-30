@@ -4,7 +4,9 @@ import nl.first8.hu.ticketsale.registration.Account;
 import nl.first8.hu.ticketsale.registration.AccountInfo;
 import nl.first8.hu.ticketsale.sales.Ticket;
 import nl.first8.hu.ticketsale.sales.TicketId;
+import nl.first8.hu.ticketsale.venue.Artist;
 import nl.first8.hu.ticketsale.venue.Concert;
+import nl.first8.hu.ticketsale.venue.Genre;
 import nl.first8.hu.ticketsale.venue.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,9 +65,9 @@ public class TestRepository {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Concert createDefaultConcert(String artist, String locationName) {
         Location location = createLocation(locationName);
+        Artist newArtist = createArtist(artist, Genre.Grindcore);
         Concert concert = new Concert();
-        concert.setArtist(artist);
-        concert.setGenre("Grindcore");
+        concert.setArtist(newArtist);
         concert.setLocation(location);
         entityManager.persist(concert);
         return concert;
@@ -73,11 +75,11 @@ public class TestRepository {
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Concert createConcert(String artist, String genre, String locationName) {
+    public Concert createConcert(String artist, Genre genre, String locationName) {
         Location location = createLocation(locationName);
+        Artist newArtist = createArtist(artist, genre);
         Concert concert = new Concert();
-        concert.setArtist(artist);
-        concert.setGenre(genre);
+        concert.setArtist(newArtist);
         concert.setLocation(location);
         entityManager.persist(concert);
         return concert;
@@ -90,6 +92,15 @@ public class TestRepository {
         location.setName(locationName);
         entityManager.persist(location);
         return location;
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    private Artist createArtist(String artistName, Genre genre) {
+        Artist artist = new Artist();
+        artist.setName(artistName);
+        artist.setGenre(genre);
+        entityManager.persist(artist);
+        return artist;
     }
 
 
